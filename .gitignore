@@ -1,0 +1,9 @@
+*~
+*.o
+tmp*
+a.out
+fcc
+
+# clion
+cmake-build-debug/
+.idea/
