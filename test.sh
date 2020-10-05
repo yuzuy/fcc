@@ -21,5 +21,6 @@ assert 123 123
 assert 55 55
 assert 178 "123+55"
 assert 68 "123-55"
+assert 59 "23 + 50 - 14"
 
 echo OK

@@ -3,4 +3,4 @@ project(compiler C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(fcc.c)
+add_executable(fcc fcc.c)

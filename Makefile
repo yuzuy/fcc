@@ -7,6 +7,10 @@ test: fcc
 	@chmod a+x test.sh
 	./test.sh
 
+.PHONY: test.on-linux
+test.on-linux:
+	docker run --rm -it -v /Users/aoimoon/prog/c/fcc:/home/user/fcc -w /home/user/fcc compilerbook make test
+
 .PHONY: clean
 clean:
 	rm -f 9cc *.o *~ tmp*
