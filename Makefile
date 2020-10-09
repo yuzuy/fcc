@@ -9,7 +9,7 @@ test: fcc
 
 .PHONY: test.on-linux
 test.on-linux:
-	docker run --rm -it -v /Users/aoimoon/prog/c/fcc:/home/user/fcc -w /home/user/fcc compilerbook make test
+	docker run --rm -it -v /Users/aoimoon/prog/2020/c/fcc:/fcc -w /fcc compilerbook make test
 
 .PHONY: clean
 clean:
@@ -17,4 +17,4 @@ clean:
 
 .PHONY: on-linux
 on-linux:
-	docker run --rm -it -v /Users/aoimoon/prog/c/fcc:/home/user/fcc -w /home/user/fcc compilerbook /bin/bash
+	docker run --rm -it -v /Users/aoimoon/prog/2020/c/fcc:/fcc -w /fcc compilerbook /bin/bash
