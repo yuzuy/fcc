@@ -18,6 +18,7 @@ struct Token {
     Token *next;
     int val;
     char *str;
+    int len;
 };
 
 typedef enum {
@@ -25,6 +26,12 @@ typedef enum {
     ND_SUB,
     ND_MUL,
     ND_DIV,
+    ND_EQ,
+    ND_NEQ,
+    ND_GT,
+    ND_LT,
+    ND_GE,
+    ND_LE,
     ND_NUM,
 } NodeKind;
 
