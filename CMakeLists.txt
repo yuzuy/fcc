@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.17)
-project(compiler C)
+project(fcc C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(fcc fcc.c)
+add_executable(fcc main.c parse.c codegen.c fcc.h)

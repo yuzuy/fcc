@@ -1,6 +1,11 @@
 CFLAGS=-std=c11 -g -static
+SRCS=$(wildcard *.c)
+OBJS=$(SRCS:.c=.o)
 
-fcc: fcc.c
+fcc: $(OBJS)
+	$(CC) -o fcc $(OBJS) $(LDFLAGS)
+
+$(OBJS): fcc.h
 
 .PHONY: test
 test: fcc
@@ -13,7 +18,7 @@ test.on-linux:
 
 .PHONY: clean
 clean:
-	rm -f 9cc *.o *~ tmp*
+	@rm -f 9cc *.o *~ tmp*
 
 .PHONY: on-linux
 on-linux:
