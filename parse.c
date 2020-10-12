@@ -6,6 +6,18 @@
 #include <string.h>
 #include "fcc.h"
 
+Token *token;
+char *user_input;
+
+void error(char *fmt, ...) {
+    va_list ap;
+    va_start(ap, fmt);
+
+    fprintf(stderr, fmt, ap);
+    fprintf(stderr, "\n");
+    exit(1);
+}
+
 void error_at(char *loc, char *fmt, ...) {
     va_list ap;
     va_start(ap, fmt);
@@ -19,6 +31,10 @@ void error_at(char *loc, char *fmt, ...) {
     exit(1);
 }
 
+bool at_eof() {
+    return token->kind == TK_EOF;
+}
+
 bool consume(char *op) {
     if (token->kind != TK_RESERVED ||
         strlen(op) != token->len ||
@@ -26,6 +42,14 @@ bool consume(char *op) {
         return false;
     token = token->next;
     return true;
+}
+
+Token *consume_ident() {
+    if (token->kind != TK_IDENT)
+        return NULL;
+    Token *tok = token;
+    token = token->next;
+    return tok;
 }
 
 void expect(char *op) {
@@ -72,7 +96,7 @@ Token *tokenize(char *p) {
             continue;
         }
 
-        if (strchr("+-*/()><", *p)) {
+        if (strchr("+-*/()><=;", *p)) {
             cur = new_token(TK_RESERVED, cur, p, 1);
             p++;
             continue;
@@ -84,12 +108,20 @@ Token *tokenize(char *p) {
             continue;
         }
 
+        if ('a' <= *p && *p <= 'z') {
+            cur = new_token(TK_IDENT, cur, p++, 0);
+            cur->len = 1;
+            continue;
+        }
+
         error_at(p, "cannot tokenize");
     }
 
     new_token(TK_EOF, cur, p, 0);
     return head.next;
 }
+
+Node *code[100];
 
 Node *new_node(NodeKind kind, Node *lhs, Node *rhs) {
     Node *node = calloc(1, sizeof(Node));
@@ -106,8 +138,31 @@ Node *new_node_num(int val) {
     return node;
 }
 
+void program() {
+    int i = 0;
+    while (!at_eof()) {
+        code[i++] = stmt();
+    }
+    code[i] = NULL;
+}
+
+Node *stmt() {
+    Node *node = expr();
+    expect(";");
+    return node;
+}
+
 Node *expr() {
-    return equality();
+    return assign();
+}
+
+Node *assign() {
+    Node *node = equality();
+
+    if (consume("="))
+        node = new_node(ND_ASSIGN, node, assign());
+
+    return node;
 }
 
 Node *equality() {
@@ -176,6 +231,14 @@ Node *primary() {
     if (consume("(")) {
         Node *node = expr();
         expect(")");
+        return node;
+    }
+
+    Token *tok = consume_ident();
+    if (tok) {
+        Node *node = calloc(1, sizeof(Node));
+        node->kind = ND_LVAR;
+        node->offset = (tok->str[0] - 'a' + 1) * 8;
         return node;
     }
 
