@@ -48,13 +48,25 @@ struct Node {
     int offset;
 };
 
+typedef struct LVar LVar;
+
+struct LVar {
+    LVar *next;
+    char *name;
+    int len;
+    int offset;
+};
+
 Token *token;
 char *user_input;
 Node *code[100];
+LVar *locals;
 
 void error(char *fmt, ...);
 void error_at(char *loc, char *fmt, ...);
+bool at_eof();
 bool consume(char *op);
+Token *consume_ident();
 void expect(char *op);
 int expect_number();
 Token *new_token(TokenKind kind, Token *cur, char *str, int len);

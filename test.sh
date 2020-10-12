@@ -41,5 +41,6 @@ assert 0 "2 < 1;"
 assert 0 "1 >= 2;"
 assert 0 "2 <= 1;"
 assert 42 "a=42; a;"
+assert 50 "foo=50; foo;"
 
 echo OK

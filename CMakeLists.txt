@@ -3,4 +3,4 @@ project(fcc C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(fcc main.c parse.c codegen.c fcc.h)
+add_executable(fcc main.c lexer.c parse.c codegen.c fcc.h)
