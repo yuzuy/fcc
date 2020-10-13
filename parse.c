@@ -75,8 +75,19 @@ void program() {
 }
 
 Node *stmt() {
-    Node *node = expr();
-    expect(";");
+    Node *node;
+    if (token->kind == TK_RETURN) {
+        token = token->next;
+        node = calloc(1, sizeof(Node));
+        node->kind = ND_RETURN;
+        node->lhs = expr();
+    } else {
+        node = expr();
+    }
+
+    if (!consume(";"))
+        error_at(token->str, "token is not ';'");
+
     return node;
 }
 

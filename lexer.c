@@ -8,8 +8,11 @@
 Token *token;
 char *user_input;
 
-bool is_letter(char c) {
-    return 'a' <= c && c <= 'z';
+bool is_alphanum(char c) {
+    return ('a' <= c && c <= 'z') ||
+           ('A' <= c && c <= 'Z') ||
+           ('0' <= c && c <= '9') ||
+           (c == '_');
 }
 
 void error(char *fmt, ...) {
@@ -70,15 +73,21 @@ Token *tokenize(char *p) {
             continue;
         }
 
+        if (strncmp(p, "return", 6) == 0 && !is_alphanum(p[6])) {
+            cur = new_token(TK_RETURN, cur, p, 6);
+            p += 6;
+            continue;
+        }
+
         if (isdigit(*p)) {
             cur = new_token(TK_NUM, cur, p, 0);
             cur->val = (int) strtol(p, &p, 10);
             continue;
         }
 
-        if (is_letter(*p)) {
+        if (is_alphanum(*p)) {
             char str[255];
-            for (int i = 0; is_letter(*p); i++) {
+            for (int i = 0; is_alphanum(*p); i++) {
                 str[i] = *p;
                 p++;
             }
